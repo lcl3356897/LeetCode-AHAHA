@@ -33,20 +33,18 @@ public class Solution {
 
 public class Solution {
 	public String convert(String s, int nRows) {  
-        if(s == null || s.length()==0 || nRows <=0)  
-            return "";  
-        if(nRows == 1)  
-            return s;
+        if(s == null || s.length()==0 || nRows <=0) return "";  
+        if(nRows == 1) return s;
             
         StringBuilder rst = new StringBuilder();  
-        int size = 2*nRows-2;  
-        for(int i=0;i<nRows;i++){  
-            for(int j=i;j<s.length();j+=size){  
+        int size = 2 * nRows - 2;  
+        for(int i = 0; i < nRows; i++){  
+            for(int j = i; j < s.length(); j += size){  
                 rst.append(s.charAt(j));  
                 //mid char
                 if(i != 0 && i != nRows - 1){//except the first row and the last row
-                    int temp = j+size-2*i;
-                    if(temp<s.length())
+                    int temp = j + size - 2 * i;
+                    if(temp < s.length())
                         rst.append(s.charAt(temp));
                 }
             }                  

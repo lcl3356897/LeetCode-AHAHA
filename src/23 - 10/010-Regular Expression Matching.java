@@ -2,26 +2,56 @@
 //
 public class Solution {
     public boolean isMatch(String s, String p) {
-		if(p.length() == 0) return s.length() == 0;
- 
+        if(p.length() == 0) return s.length() == 0;
+
         if(p.length() == 1 || p.charAt(1) != '*'){
-            if(s.length() < 1 || (p.charAt(0) != '.' && s.charAt(0) != p.charAt(0))){
+            if(s.length() == 0 || (p.charAt(0) != '.' && s.charAt(0) != p.charAt(0))){
                 return false;
             }
-            return isMatch(s.substring(1), p.substring(1));    
- 
-        }else{
-            int i = -1; 
-            while(i < s.length() && (i < 0 || p.charAt(0) == '.' || p.charAt(0) == s.charAt(i))){
+            return isMatch(s.substring(1), p.substring(1));
+        }
+        else{
+            int i = -1;
+            while(i < s.length() && (i < 0 || p.charAt(0) == '.' || s.charAt(i) == p.charAt(0))){
                 if(isMatch(s.substring(i+1), p.substring(2))){
                     return true;
                 }
                 i++;
             }
             return false;
-        } 
+        }
     }
 }
+
+//DP
+public class Solution {
+    public boolean isMatch(String s, String p) {
+        if(s == null || p == null) return false;
+        int m = s.length(), n = p.length();
+
+        boolean[][] dp = new boolean[m + 1][n + 1];
+        dp[0][0] = true;
+
+        for(int j = 1; j <= n; j++){
+            dp[0][j] = p.charAt(j-1) == '*' && j >= 2 && dp[0][j-2];
+        }
+
+        for(int i = 1; i <= m; i++){
+            for(int j = 1; j <= n; j++){
+                dp[i][j] = ( dp[i-1][j-1] && equals(s, p, i-1, j-1) )
+                        || ( (dp[i-1][j] || dp[i][j-1]) && p.charAt(j-1) == '*' && equals(s, p, i-1, j-2) )
+                        || ( p.charAt(j-1) == '*' && j >= 2 && dp[i][j-2] );
+            }
+        }
+
+        return dp[m][n];
+    }
+
+    private boolean equals(String s, String p, int si, int pi) {
+        return (s.charAt(si) == p.charAt(pi) || p.charAt(pi) == '.');
+    }
+}
+
 
 //More Readable
 public boolean isMatch(String s, String p) {
@@ -79,42 +109,4 @@ public boolean isMatch(String s, String p) {
 		}
 		return false;
 	}
-}
-
-//DP
-public class Solution {
-    public boolean isMatch(String s, String p) {
-        int m = s.length();
-        int n = p.length();
-    
-        if (s == null || p == null) {
-            return false;
-        }
-    
-        boolean[][] dp = new boolean[m+1][n+1];
-        dp[0][0] = true;
-    
-        for (int i = 1; i <= m; i++) {
-            dp[i][0] = false;
-        }
-        for (int j = 1; j <= n; j++) {
-            dp[0][j] = (p.charAt(j-1) == '*') && (j-2 >= 0) && dp[0][j-2];
-        }
-    
-        for (int i = 1; i <= m; i++) {
-            for (int j = 1; j <= n; j++) {
-                dp[i][j] = ((dp[i-1][j-1]) && equals(s, p, i-1, j-1))
-                        ||  ((dp[i-1][j] || dp[i][j-1]) 
-                            && (p.charAt(j-1) == '*') 
-                            && equals(s, p, i-1, j-2))
-                        ||  ((p.charAt(j-1) == '*') && (j-2 >= 0) && dp[i][j-2]);
-            }
-        }
-    
-        return dp[m][n];
-    }
-    
-    private boolean equals(String s, String p, int si, int pi) {
-        return (s.charAt(si) == p.charAt(pi) || p.charAt(pi) == '.');
-    }
 }

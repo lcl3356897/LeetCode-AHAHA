@@ -19,7 +19,7 @@ public class Solution {
 
 public class Solution {
     public int findDuplicate(int[] nums) {
-        int left = 0, right = nums.length - 1;
+        int left = 1, right = nums.length - 1;
         while(left < right){
             int mid = left + (right - left) / 2;
             int count = 0;

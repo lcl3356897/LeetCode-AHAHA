@@ -6,7 +6,7 @@ public class Solution {
     	List<TreeNode> rst = new ArrayList<TreeNode>();
     	if(start > end) rst.add(null);
     	
-    	for(int i=start;i<=end;i++){
+    	for(int i = start; i <= end; i++){
     		List<TreeNode> left = generate(start, i-1);
     		List<TreeNode> right = generate(i+1, end);
     		for(TreeNode l : left){
